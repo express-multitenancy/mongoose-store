@@ -1,0 +1,58 @@
+{
+  "name": "@express-multitenancy/mongoose-store",
+  "version": "0.0.1",
+  "description": "MongoDB-based tenant storage and automatic filtering for express-multitenancy",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/",
+    "LICENSE",
+    "README.md"
+  ],
+  "directories": {
+    "lib": "lib",
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node examples/app.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "express",
+    "multitenancy",
+    "mongoose",
+    "mongodb",
+    "tenant",
+    "saas",
+    "multi-tenant"
+  ],
+  "author": "Zahid Cakici <zahid.cakici@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/express-multitenancy/mongoose-store.git"
+  },
+  "bugs": {
+    "url": "https://github.com/express-multitenancy/mongoose-store/issues"
+  },
+  "homepage": "https://github.com/express-multitenancy/mongoose-store#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.15.3",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "async_hooks": "^1.0.0",
+    "express-multitenancy": "^0.0.3",
+    "mongoose": "^8.14.1"
+  },
+  "peerDependencies": {
+    "express-multitenancy": ">=0.0.3",
+    "mongoose": ">=6.0.0"
+  }
+}
