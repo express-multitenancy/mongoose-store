@@ -70,6 +70,7 @@ export function multitenancyPlugin(schema: Schema, options: MultitenancyPluginOp
     // Only add tenantId for models that aren't in the exemptModels set
     const tenantIdField = {
       type: String,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       required: function (this: any) {
         // Check if model is exempt at validation time
         if (this.constructor && exemptModels.has(this.constructor.modelName)) {
