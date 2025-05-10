@@ -1,16 +1,17 @@
 {
   "name": "express-multitenancy-mongoose",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "MongoDB-based tenant storage and automatic filtering for express-multitenancy",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "lib/",
+    "dist/",
     "LICENSE",
     "README.md"
   ],
   "directories": {
     "lib": "lib",
+    "dist": "dist",
     "example": "examples"
   },
   "scripts": {
