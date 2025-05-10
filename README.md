@@ -1,11 +1,11 @@
-# @express-multitenancy/mongoose-store
+# express-multitenancy-mongoose
 
 <div align="center">
   
 [![Build Status](https://img.shields.io/github/actions/workflow/status/express-multitenancy/express-multitenancy/main.yml)](https://github.com/express-multitenancy/express-multitenancy/actions/workflows/main.yml)
-![Version](https://img.shields.io/npm/v/@express-multitenancy/mongoose-store)
-![License](https://img.shields.io/npm/l/@express-multitenancy/mongoose-store)
-![Downloads](https://img.shields.io/npm/dm/@express-multitenancy/mongoose-store)
+![Version](https://img.shields.io/npm/v/express-multitenancy-mongoose)
+![License](https://img.shields.io/npm/l/express-multitenancy-mongoose)
+![Downloads](https://img.shields.io/npm/dm/express-multitenancy-mongoose)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue)
   
 **A MongoDB-based tenant storage implementation for the express-multitenancy package**
@@ -36,13 +36,13 @@
 
 ```bash
 # Using npm
-npm install @express-multitenancy/mongoose-store mongoose express-multitenancy
+npm install express-multitenancy-mongoose mongoose express-multitenancy
 
 # Using yarn
-yarn add @express-multitenancy/mongoose-store mongoose express-multitenancy
+yarn add express-multitenancy-mongoose mongoose express-multitenancy
 
 # Using pnpm
-pnpm add @express-multitenancy/mongoose-store mongoose express-multitenancy
+pnpm add express-multitenancy-mongoose mongoose express-multitenancy
 ```
 
 ## 🚀 Quick Start
@@ -51,7 +51,7 @@ pnpm add @express-multitenancy/mongoose-store mongoose express-multitenancy
 const express = require('express');
 const mongoose = require('mongoose');
 const { multitenancy, HeaderStrategy } = require('express-multitenancy');
-const { MongooseStore, multitenancyPlugin } = require('@express-multitenancy/mongoose-store');
+const { MongooseStore, multitenancyPlugin } = require('express-multitenancy-mongoose');
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/multitenancy-app');
@@ -125,7 +125,7 @@ mongoose.plugin(multitenancyPlugin, options);
 
 ```javascript
 const mongoose = require('mongoose');
-const { MongooseStore } = require('@express-multitenancy/mongoose-store');
+const { MongooseStore } = require('express-multitenancy-mongoose');
 
 // Create custom tenant schema
 const customTenantSchema = new mongoose.Schema({
@@ -149,7 +149,7 @@ const store = new MongooseStore({
 Some models in your application might be global and not tenant-specific (like settings or shared resources). You can exempt these models from tenant filtering:
 
 ```javascript
-const { multitenancyPlugin, exemptModels } = require('@express-multitenancy/mongoose-store');
+const { multitenancyPlugin, exemptModels } = require('express-multitenancy-mongoose');
 
 // Add models to exempt list
 exemptModels.add('GlobalSettings');

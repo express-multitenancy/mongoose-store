@@ -1,6 +1,6 @@
 {
-  "name": "@express-multitenancy/mongoose-store",
-  "version": "0.0.2",
+  "name": "express-multitenancy-mongoose",
+  "version": "0.0.3",
   "description": "MongoDB-based tenant storage and automatic filtering for express-multitenancy",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
