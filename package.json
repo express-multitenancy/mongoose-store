@@ -14,10 +14,17 @@
     "example": "examples"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc",
     "start": "node examples/app.js",
-    "prepublishOnly": "npm run build"
+    "lint": "eslint --ext .ts ./lib",
+    "lint:fix": "eslint --ext .ts ./lib --fix",
+    "format": "prettier --write \"lib/**/*.ts\"",
+    "prepublishOnly": "npm run lint && npm run build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "format:check": "prettier --check \"lib/**/*.ts\""
   },
   "keywords": [
     "express",
@@ -41,18 +48,33 @@
   "engines": {
     "node": ">=14.0.0"
   },
-  "devDependencies": {
-    "@types/express": "^5.0.1",
-    "@types/node": "^22.15.3",
-    "typescript": "^5.8.3"
-  },
   "dependencies": {
     "async_hooks": "^1.0.0",
-    "express-multitenancy": "^0.0.3",
-    "mongoose": "^8.14.1"
+    "express-multitenancy": ">=0.0.3",
+    "mongoose": ">=6.0.0"
   },
   "peerDependencies": {
     "express-multitenancy": ">=0.0.3",
     "mongoose": ">=6.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.15.3",
+    "@types/supertest": "^6.0.3",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "jest": "^29.7.0",
+    "jest-environment-node": "^29.7.0",
+    "mongodb-memory-server": "^10.1.4",
+    "prettier": "^3.1.1",
+    "prettier-eslint": "^16.4.1",
+    "rimraf": "^5.0.10",
+    "supertest": "^7.1.0",
+    "ts-jest": "^29.3.2",
+    "typescript": "^5.8.3"
   }
 }

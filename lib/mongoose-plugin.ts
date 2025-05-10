@@ -1,5 +1,5 @@
-import { Schema } from "mongoose";
-import { tenantContext } from "express-multitenancy";
+import { Schema } from 'mongoose';
+import { tenantContext } from 'express-multitenancy';
 
 /**
  * Set of model names that should be exempt from tenant filtering.
@@ -36,7 +36,7 @@ export interface MultitenancyPluginOptions {
  * Mongoose plugin that adds multi-tenancy support to schemas.
  *
  * This plugin:
- * 1. Adds a tenantId field to the schema if it doesn't exist
+ * 1. Adds a tenantId field to the schema if it doesn't exist (for non-exempt models)
  * 2. Automatically filters queries by the current tenant context
  * 3. Sets the tenantId on new documents based on the current tenant context
  *
@@ -52,10 +52,7 @@ export interface MultitenancyPluginOptions {
  * mongoose.plugin(multitenancyPlugin);
  * ```
  */
-export function multitenancyPlugin(
-  schema: Schema,
-  options: MultitenancyPluginOptions
-): void {
+export function multitenancyPlugin(schema: Schema, options: MultitenancyPluginOptions = {}): void {
   // Add exempt models from options to the exemptModels set
   if (options?.exemptModels) {
     for (const modelName of options.exemptModels) {
@@ -63,28 +60,33 @@ export function multitenancyPlugin(
     }
   }
 
-  // Check if model is in a collection of exemptModels
-  // This is best-effort as the model might not be registered yet
-  const modelName = (schema as any).options?.collection;
-  const isExemptModel = modelName && exemptModels.has(modelName);
-
-  // Add tenantId field to schema if it doesn't exist
-  if (!schema.path("tenantId")) {
-    console.warn("Adding tenantId field to schema");
-    schema.add({
-      tenantId: {
-        type: String,
-        // Only make it required for non-exempt models
-        required: !isExemptModel,
-      },
-    });
+  if (options?.debug) {
+    console.log('Applying multitenancy plugin to schema');
   }
 
-  if (options?.debug) {
-    console.log("Applying multitenancy plugin to schema");
+  // We need to add the tenantId field conditionally with dynamic validation
+  // since we don't know the model name at plugin time
+  if (!schema.path('tenantId')) {
+    // Only add tenantId for models that aren't in the exemptModels set
+    const tenantIdField = {
+      type: String,
+      required: function (this: any) {
+        // Check if model is exempt at validation time
+        if (this.constructor && exemptModels.has(this.constructor.modelName)) {
+          return false;
+        }
+        return true;
+      },
+    };
+    schema.add({ tenantId: tenantIdField });
+
+    if (options?.debug) {
+      console.log('Added tenantId field to schema with conditional validation');
+    }
   }
 
   // Apply tenant filter to all find queries (find, findOne, findOneAndUpdate, etc.)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   schema.pre(/^find/, function (this: any, next: any) {
     // Check if this model should be exempt
     if (this.model && exemptModels.has(this.model.modelName)) {
@@ -101,15 +103,16 @@ export function multitenancyPlugin(
       this.where({ tenantId });
     }
 
-    // If returnTenantId is true, include tenantId in the results
-    if (!options?.hideTenantId) {
-      this.select("-tenantId");
+    // If hideTenantId is true, exclude tenantId from the results
+    if (options?.hideTenantId) {
+      this.select('-tenantId');
     }
 
     next();
   });
 
   // Apply tenant filter to count queries
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   schema.pre(/^count/, function (this: any, next: any) {
     // Check if this model should be exempt
     if (this.model && exemptModels.has(this.model.modelName)) {
@@ -126,29 +129,58 @@ export function multitenancyPlugin(
   });
 
   // Apply tenant ID on document save
-  schema.pre("save", function (this: any, next: any) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  schema.pre('save', function (this: any, next: any) {
     // Check if this model should be exempt
     if (this.constructor && exemptModels.has(this.constructor.modelName)) {
       if (options?.debug) {
-        console.log(`[Save] Skipping tenantId setting for exempt model: ${this.constructor.modelName}`);
+        console.log(
+          `[Save] Skipping tenantId setting for exempt model: ${this.constructor.modelName}`,
+        );
       }
       return next();
     }
 
     const tenantId = tenantContext.getStore();
     if (options?.debug) {
-      console.log(`[Save] Current tenant context: ${tenantId || "none"}`);
+      console.log(`[Save] Current tenant context: ${tenantId || 'none'}`);
     }
 
-    if (tenantId && !this.get("tenantId")) {
+    if (tenantId && !this.get('tenantId')) {
       if (options?.debug) {
         console.log(`[Save] Setting tenantId to ${tenantId}`);
       }
-      this.set("tenantId", tenantId);
+      this.set('tenantId', tenantId);
     } else if (!tenantId) {
       if (options?.debug) {
-        console.log("[Save] No tenant context found when saving document");
+        console.log('[Save] No tenant context found when saving document');
       }
+    }
+
+    next();
+  });
+
+  // Also apply tenant ID before validation to ensure it passes required validation
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  schema.pre('validate', function (this: any, next: any) {
+    // Skip for exempt models
+    if (this.constructor && exemptModels.has(this.constructor.modelName)) {
+      if (options?.debug) {
+        console.log(
+          `[Validate] Skipping tenant validation for exempt model: ${this.constructor.modelName}`,
+        );
+      }
+      return next();
+    }
+
+    const tenantId = tenantContext.getStore();
+
+    // Set tenantId if available from context and not already set
+    if (tenantId && !this.get('tenantId')) {
+      if (options?.debug) {
+        console.log(`[Validate] Setting tenantId to ${tenantId} before validation`);
+      }
+      this.set('tenantId', tenantId);
     }
 
     next();

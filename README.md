@@ -1,22 +1,51 @@
 # @express-multitenancy/mongoose-store
 
-A MongoDB-based tenant storage implementation for the [express-multitenancy](https://github.com/express-multitenancy/express-multitenancy) package. This package provides seamless integration between express-multitenancy and Mongoose, enabling automatic tenant filtering and database separation in multi-tenant applications.
+<div align="center">
+  
+[![Build Status](https://img.shields.io/github/actions/workflow/status/express-multitenancy/express-multitenancy/main.yml)](https://github.com/express-multitenancy/express-multitenancy/actions/workflows/main.yml)
+![Version](https://img.shields.io/npm/v/@express-multitenancy/mongoose-store)
+![License](https://img.shields.io/npm/l/@express-multitenancy/mongoose-store)
+![Downloads](https://img.shields.io/npm/dm/@express-multitenancy/mongoose-store)
+![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue)
+  
+**A MongoDB-based tenant storage implementation for the express-multitenancy package**
+  
+[Getting Started](#getting-started) •
+[Features](#features) •
+[Installation](#installation) •
+[Usage](#usage) •
+[API Reference](#api-reference) •
+[Advanced Usage](#advanced-usage) •
+[License](#license)
+  
+</div>
 
-## Features
+## 🌟 Overview
 
-- **MongoDB-based tenant storage** for production-ready applications
-- **Automatic tenant filtering** for all Mongoose queries
-- **Transparent tenant ID assignment** for new documents
-- **Support for exempt models** (global resources unaffected by tenant filtering)
-- **TypeScript support** with full type definitions
+@express-multitenancy/mongoose-store provides seamless integration between express-multitenancy and Mongoose, enabling automatic tenant filtering and database separation in multi-tenant applications. This package makes building MongoDB-backed multi-tenant applications simple and secure.
 
-## Installation
+## ✨ Features
+
+- **💾 MongoDB-based tenant storage** for production-ready applications
+- **🔍 Automatic tenant filtering** for all Mongoose queries
+- **🔐 Transparent tenant ID assignment** for new documents
+- **🌐 Support for exempt models** (global resources unaffected by tenant filtering)
+- **📝 TypeScript support** with full type definitions
+
+## 📦 Installation
 
 ```bash
+# Using npm
 npm install @express-multitenancy/mongoose-store mongoose express-multitenancy
+
+# Using yarn
+yarn add @express-multitenancy/mongoose-store mongoose express-multitenancy
+
+# Using pnpm
+pnpm add @express-multitenancy/mongoose-store mongoose express-multitenancy
 ```
 
-## Quick Start
+## 🚀 Quick Start
 
 ```javascript
 const express = require('express');
@@ -59,7 +88,7 @@ app.get('/products', async (req, res) => {
 app.listen(3000);
 ```
 
-## API Reference
+## 📖 API Reference
 
 ### MongooseStore
 
@@ -90,7 +119,7 @@ mongoose.plugin(multitenancyPlugin, options);
 - `hideTenantId` (optional): Whether to hide tenantId in the response (default: false)
 - `debug` (optional): Whether to enable debug logging (default: false)
 
-## Advanced Usage
+## 🔧 Advanced Usage
 
 ### Using a Custom Tenant Schema
 
@@ -132,6 +161,22 @@ mongoose.plugin(multitenancyPlugin, {
 });
 ```
 
-## License
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
 
 MIT
+
+---
+
+<div align="center">
+  <sub>Built with ❤️ by <a href="https://github.com/zahidcakici">Zahid Cakici</a></sub>
+</div>
